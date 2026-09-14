@@ -2,6 +2,14 @@
 
 Kleine schwarze Windows-App für automatische Linksklicks. Das Fenster ist 340 × 300 logische Pixel groß. Die App arbeitet lokal.
 
+## Lizenz und Nutzung
+
+Autoklicker steht unter der [MIT-Lizenz](LICENSE). Du darfst die Software entsprechend dieser Lizenz verwenden, kopieren und weitergeben.
+
+### Nutzungsbedingungen (TOS) und Eigenverantwortung
+
+Die Software wird ohne Gewährleistung bereitgestellt und auf eigene Verantwortung genutzt. Du bist selbst dafür verantwortlich, vor der Nutzung die geltenden Gesetze sowie die Nutzungsbedingungen des jeweiligen Spiels, Dienstes oder Programms zu prüfen. Automatisierte Eingaben können dort verboten sein und zu Einschränkungen oder einer Kontosperre führen. Der Autor übernimmt im gesetzlich zulässigen Rahmen keine Haftung für Schäden, Datenverlust, Kontosperren oder sonstige Folgen der Nutzung. Verwende die Software nicht für rechtswidrige Zwecke oder zum Umgehen von Sicherheitsmechanismen.
+
 ## Bedienung
 
 1. **Autoklicker** auf dem Desktop öffnen.
@@ -45,4 +53,4 @@ Die App vor dem vollständigen Testlauf schließen, damit die Pipe für die Inst
 
 `--allocations` vergleicht zusätzlich den temporären verwalteten Speicher für Statuswechsel ohne Rendering und wiederholte identische Speicheraufrufe. Das ist ein isolierter Entwicklungstest, keine Messung des gesamten App-RAMs.
 
-Das App-Symbol ist ein eigener geometrischer Entwurf. `scripts\New-Icon.ps1` erzeugt die ICO-Datei in mehreren Auflösungen. Quellcode liegt unter `src\Autoklicker`, Tests unter `tests\Autoklicker.Tests`. Der ursprüngliche Umfang steht in `PROJEKTPLAN.md`, die Abnahme in `PRUEFBERICHT.md`.
+Das App-Symbol ist ein eigener geometrischer Entwurf. `scripts\New-Icon.ps1` erzeugt die ICO-Datei in mehreren Auflösungen. Quellcode liegt unter `src\Autoklicker`, Tests unter `tests\Autoklicker.Tests`.

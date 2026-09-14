@@ -37,7 +37,7 @@ VIAddVersionKey "CompanyName" "${APP_PUBLISHER}"
 VIAddVersionKey "FileDescription" "Kompakter Autoklicker für Windows"
 VIAddVersionKey "FileVersion" "${APP_VERSION}"
 VIAddVersionKey "ProductVersion" "${APP_VERSION}"
-VIAddVersionKey "LegalCopyright" ""
+VIAddVersionKey "LegalCopyright" "Copyright (c) 2026 nolongkisses - MIT License"
 VIAddVersionKey "OriginalFilename" "Autoklicker-Setup-${APP_VERSION}-x64.exe"
 
 !define MUI_ABORTWARNING
