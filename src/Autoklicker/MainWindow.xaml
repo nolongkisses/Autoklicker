@@ -18,10 +18,10 @@
    <Grid Background="Transparent">
     <Border Background="{StaticResource PanelBackground}" CornerRadius="8" Padding="2" Margin="0,0,9,0" HorizontalAlignment="Right" VerticalAlignment="Center">
      <StackPanel Orientation="Horizontal">
-      <Button Width="30" Height="24" Margin="1,0" Background="Transparent" BorderThickness="0" Padding="0" Click="Minimize_Click" ToolTip="Minimieren" AutomationProperties.Name="Minimieren">
+      <Button x:Name="MinimizeButton" Width="30" Height="24" Margin="1,0" Background="Transparent" BorderThickness="0" Padding="0" Focusable="False" IsTabStop="False" Click="Minimize_Click" ToolTip="In den Infobereich minimieren" AutomationProperties.Name="Minimieren">
        <Path Data="M 0,0 L 10,0" Stroke="#949494" StrokeThickness="1.2" StrokeStartLineCap="Round" StrokeEndLineCap="Round" />
       </Button>
-      <Button Width="30" Height="24" Margin="1,0" Background="Transparent" BorderThickness="0" Padding="0" Click="Close_Click" ToolTip="Schließen" AutomationProperties.Name="Schließen">
+      <Button x:Name="CloseButton" Width="30" Height="24" Margin="1,0" Background="Transparent" BorderThickness="0" Padding="0" Focusable="False" IsTabStop="False" Click="Close_Click" ToolTip="Schließen" AutomationProperties.Name="Schließen">
        <Path Data="M 0,0 L 9,9 M 9,0 L 0,9" Stroke="#949494" StrokeThickness="1.2" StrokeStartLineCap="Round" StrokeEndLineCap="Round" />
       </Button>
      </StackPanel>

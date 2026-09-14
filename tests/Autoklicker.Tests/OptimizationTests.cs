@@ -66,6 +66,39 @@ internal static class OptimizationTests
         var app = new TestApp { ShutdownMode = ShutdownMode.OnExplicitShutdown };
         app.InitializeTheme();
         app.ShutdownMode = ShutdownMode.OnExplicitShutdown;
+        test("Fensterbuttons zeigen keinen Tastatur-Fokusrahmen", () =>
+        {
+            var window = new MainWindow(new SettingsStore(NewDirectory()));
+            try
+            {
+                var minimize = (Button)window.FindName("MinimizeButton");
+                var close = (Button)window.FindName("CloseButton");
+                Assert(!minimize.Focusable && !minimize.IsTabStop, "Minimieren kann Fokusrahmen erhalten");
+                Assert(!close.Focusable && !close.IsTabStop, "Schließen kann Fokusrahmen erhalten");
+            }
+            finally { window.Close(); }
+        });
+        test("Minimieren wechselt in den Tray und Tray-Klick stellt das Fenster wieder her", () =>
+        {
+            var window = new MainWindow(new SettingsStore(NewDirectory()));
+            var flags = BindingFlags.Instance | BindingFlags.NonPublic;
+            window.Show();
+            try
+            {
+                typeof(MainWindow).GetMethod("MinimizeToTray", flags)!.Invoke(window, null);
+                PumpFor(50);
+                Assert(!window.IsVisible && !window.ShowInTaskbar && window.WindowState == WindowState.Minimized,
+                    "Fenster bleibt nach Tray-Minimierung sichtbar oder in der Taskleiste");
+
+                object[] message = [(nint)0, TrayIcon.CallbackMessage, (nint)0, (nint)0x0202, false];
+                typeof(MainWindow).GetMethod("WindowMessage", flags)!.Invoke(window, message);
+                PumpFor(50);
+                Assert((bool)message[4], "Tray-Klick wurde nicht verarbeitet");
+                Assert(window.IsVisible && window.ShowInTaskbar && window.WindowState == WindowState.Normal,
+                    "Tray-Klick stellt das Fenster nicht vollständig wieder her");
+            }
+            finally { window.Close(); }
+        });
         test("Schnelle Änderungen, Normalisierung und Speichern direkt beim Schließen", () =>
         {
             string directory = NewDirectory(), path = Path.Combine(directory, "settings.json");

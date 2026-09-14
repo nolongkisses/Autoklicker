@@ -19,6 +19,8 @@ Die Software wird ohne Gewährleistung bereitgestellt und auf eigene Verantwortu
 
 Die Schaltfläche **Starten** lässt eine Sekunde Zeit zum Positionieren der Maus. **Stoppen** oder der Hotkey brechen auch diesen Vorlauf ab. Der globale Hotkey funktioniert bei minimiertem Fenster. Bereits belegte oder reservierte Hotkeys werden abgewiesen; die bisherige Belegung bleibt erhalten. Falls der gespeicherte Hotkey beim Start belegt ist, zuerst einen anderen auswählen.
 
+Die Schaltfläche **Minimieren** blendet Autoklicker aus der Taskleiste aus und zeigt stattdessen das App-Symbol im Windows-Infobereich bei den Tray-Icons. Ein Klick auf das Tray-Icon öffnet das Fenster wieder. Der Autoklicker und sein globaler Hotkey laufen währenddessen weiter.
+
 Automatische Klicks über dem eigenen App-Fenster werden übersprungen. Nach Verlassen des Fensters wird weitergeklickt. Einstellungen sind während des Betriebs gesperrt. Schließen, Windows-Sperre und Standby stoppen das Klicken. Die App startet immer im Zustand **Bereit**; Einstellungen werden automatisch gespeichert.
 
 Windows kann simulierte Eingaben in Programme mit höheren Rechten blockieren. Manche Anwendungen verarbeiten künstliche Klicks nicht. Die tatsächliche Klickrate kann unter hoher Systemlast abweichen.

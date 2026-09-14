@@ -57,12 +57,8 @@ public partial class App : Application
                     if (await pipe.ReadAsync(data, token).ConfigureAwait(false) == 1 && data[0] == 1)
                         await Dispatcher.InvokeAsync(() =>
                         {
-                            if (MainWindow.WindowState == WindowState.Minimized)
-                                MainWindow.WindowState = WindowState.Normal;
-                            MainWindow.Show();
-                            MainWindow.Activate();
-                            MainWindow.Topmost = true;
-                            MainWindow.Topmost = false;
+                            if (MainWindow is Autoklicker.MainWindow window)
+                                window.RestoreFromTray();
                         }, System.Windows.Threading.DispatcherPriority.Normal, token).Task.ConfigureAwait(false);
                 }
                 catch (IOException) { await Task.Delay(100, token).ConfigureAwait(false); }

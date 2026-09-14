@@ -25,9 +25,10 @@ public partial class MainWindow : Window
     private Settings _settings;
     private HotkeyService? _hotkey;
     private ClickEngine? _engine;
+    private TrayIcon? _trayIcon;
     private HwndSource? _source;
     private nint _handle;
-    private bool _ready, _syncing, _capturing, _closing, _sessionNotifications;
+    private bool _ready, _syncing, _capturing, _closing, _sessionNotifications, _inTray;
     private long _generation;
     private RunState _state;
     private readonly DispatcherTimer _countdown = new() { Interval = TimeSpan.FromSeconds(1) };
@@ -48,7 +49,7 @@ public partial class MainWindow : Window
         _ready = true;
         SourceInitialized += (_, _) => InitializeNative(warning);
         ContentRendered += (_, _) => WindowFrame.Apply(this);
-        StateChanged += (_, _) => Dispatcher.BeginInvoke(() => WindowFrame.Apply(this));
+        StateChanged += Window_StateChanged;
         Deactivated += (_, _) => { if (_capturing) EndCapture("Hotkey unverändert."); };
     }
 
@@ -58,6 +59,7 @@ public partial class MainWindow : Window
         WindowFrame.Apply(this);
         _source = HwndSource.FromHwnd(_handle);
         _source.AddHook(WindowMessage);
+        _trayIcon = new TrayIcon(_handle);
         _hotkey = new HotkeyService(_handle);
         _engine = new ClickEngine(new MouseOutput(_handle).Emit);
         _sessionNotifications = Native.WTSRegisterSessionNotification(_handle, 0);
@@ -70,6 +72,12 @@ public partial class MainWindow : Window
 
     private nint WindowMessage(nint hwnd, int msg, nint wParam, nint lParam, ref bool handled)
     {
+        if (_trayIcon?.ProcessMessage(msg, lParam) == true)
+        {
+            RestoreFromTray();
+            handled = true;
+            return 0;
+        }
         if (msg == 0x0312 && _hotkey?.Matches(wParam) == true)
         {
             if (_capturing) EndCapture("Hotkey unverändert.");
@@ -250,8 +258,41 @@ public partial class MainWindow : Window
         else SetStatus("Einstellungen konnten nicht gespeichert werden.", true);
     }
     private void Toggle_Click(object sender, RoutedEventArgs e) => Toggle(true);
-    private void Minimize_Click(object sender, RoutedEventArgs e) => WindowState = WindowState.Minimized;
+    private void Minimize_Click(object sender, RoutedEventArgs e) => MinimizeToTray();
     private void Close_Click(object sender, RoutedEventArgs e) => Close();
+    private void Window_StateChanged(object? sender, EventArgs e)
+    {
+        Dispatcher.BeginInvoke(() => WindowFrame.Apply(this));
+        if (!_closing && !_inTray && WindowState == WindowState.Minimized)
+            MinimizeToTray();
+    }
+    private void MinimizeToTray()
+    {
+        if (_closing || _inTray) return;
+        if (_trayIcon?.Show() != true)
+        {
+            WindowState = WindowState.Minimized;
+            return;
+        }
+
+        _inTray = true;
+        ShowInTaskbar = false;
+        WindowState = WindowState.Minimized;
+        Hide();
+    }
+    internal void RestoreFromTray()
+    {
+        if (_closing) return;
+        _inTray = false;
+        _trayIcon?.Hide();
+        ShowInTaskbar = true;
+        WindowState = WindowState.Normal;
+        Show();
+        Activate();
+        Topmost = true;
+        Topmost = false;
+        WindowFrame.Apply(this);
+    }
     private void Window_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
     {
         if (e.ChangedButton != MouseButton.Left || e.ButtonState != MouseButtonState.Pressed) return;
@@ -279,6 +320,7 @@ public partial class MainWindow : Window
         _saveDelay.Stop();
         _engine?.Dispose();
         _hotkey?.Dispose();
+        _trayIcon?.Dispose();
         if (_sessionNotifications) Native.WTSUnRegisterSessionNotification(_handle);
         _source?.RemoveHook(WindowMessage);
         _store.Save(_settings);
